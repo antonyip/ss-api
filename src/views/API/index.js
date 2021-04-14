@@ -145,9 +145,15 @@ const tut4_md =`
   ~~~
 `
 
-const myuser_md =`# SkynetClient-MySky User Handling`
+const myuser_md =`# User Handling`
 
-const myuserdata_md =`# SkynetClient-SkyDB UserData Handling`
+const myuserdata_md =`# UserData Handling`
+
+const mydac_md =`# DAC Handling
+You have to go to https://skey.hns.siasky.net/ to retrieve the records as the interface doesn't allow you to.
+`
+
+
 export default function View() {
   const classes = useStyles();
   var [Tut1_URL, setTut1_URL] = useState("https://siasky.net");
@@ -443,8 +449,6 @@ export default function View() {
           </Grid>
         </Grid>
 
-        
-
         <Grid container className={classes.tut_item}>
           <Grid item className={classes.tut_left} xs={8}>
             <Paper className={classes.paper}>
@@ -508,12 +512,12 @@ export default function View() {
             <Paper className={classes.paper}>
               <TextField style={{width: "95%"}} label="App Domain" onChange={(event) => setTut_40_AppDomain(event.target.value)} value={Tut_40_AppDomain} variant="standard"></TextField><br></br>
               <TextField style={{width: "95%"}} label="App MasterSeed" onChange={(event) => setTut_40_AppMasterSeed(event.target.value)} value={Tut_40_AppMasterSeed} variant="standard"></TextField><br></br>
-              <Button variant='outlined' style={{ color: 'black' }} onClick={() => Tut_CreateUserSeedForYourApp()}>Create</Button>
+              <Button variant='outlined' style={{ color: 'black' }} onClick={() => Tut_CreateUserSeedForYourApp()}>Create Child Seed</Button>
             </Paper>
           </Grid>
         </Grid>
 
-{/* SkynetClient-SkyDB UserData Handling(Browser-JS) */}
+        {/* SkynetClient-SkyDB UserData Handling(Browser-JS) */}
         <Grid container className={classes.tut_item}>
           <Grid item xs={12}>
             <Paper className={classes.paper} alignitems="center">
@@ -552,10 +556,45 @@ export default function View() {
           </Grid>
         </Grid>
 
-{/* SkynetClient-SkyDB DAC Handling(Browser-JS) */}
-<Grid container className={classes.tut_item}>
+        <Grid container className={classes.tut_item}>
+          <Grid item className={classes.tut_left} xs={8}>
+            <Paper className={classes.paper}>
+            Getting Discoverable JSON
+            </Paper>
+          </Grid>
+          <Grid item className={classes.tut_right} xs={4}>
+            <Paper className={classes.paper}>
+              {/* <TextField label="App Domain" onChange={(event) => setTut_40_AppDomain(event.target.value)} value={Tut_40_AppDomain} variant="standard"></TextField><br></br> */}
+              {/* <TextField label="App MasterSeed" onChange={(event) => setTut_40_AppMasterSeed(event.target.value)} value={Tut_40_AppMasterSeed} variant="standard"></TextField><br></br> */}
+              {/* <Button variant='outlined' style={{ color: 'black' }} onClick={() => Tut_50_ReadingData()}>Create</Button> */}
+            </Paper>
+          </Grid>
+        </Grid>
+
+        <Grid container className={classes.tut_item}>
+          <Grid item className={classes.tut_left} xs={8}>
+            <Paper className={classes.paper}>
+            Setting Discoverable JSON
+            </Paper>
+          </Grid>
+          <Grid item className={classes.tut_right} xs={4}>
+            <Paper className={classes.paper}>
+              {/* <TextField label="App Domain" onChange={(event) => setTut_40_AppDomain(event.target.value)} value={Tut_40_AppDomain} variant="standard"></TextField><br></br> */}
+              {/* <TextField label="App MasterSeed" onChange={(event) => setTut_40_AppMasterSeed(event.target.value)} value={Tut_40_AppMasterSeed} variant="standard"></TextField><br></br> */}
+              {/* <Button variant='outlined' style={{ color: 'black' }} onClick={() => Tut_50_ReadingData()}>Create</Button> */}
+            </Paper>
+          </Grid>
+        </Grid>
+
+        
+        
+
+        {/* SkynetClient-SkyDB DAC Handling(Browser-JS) */}
+        <Grid container className={classes.tut_item}>
           <Grid item xs={12}>
-            <Paper className={classes.paper} alignitems="center"><p>SkynetClient-SkyDB DAC Handling(Browser-JS)</p></Paper>
+            <Paper className={classes.paper} alignitems="center">
+            <ReactMarkdown source={mydac_md} /></Paper>
+            
           </Grid>
         </Grid>
 
