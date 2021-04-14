@@ -1,5 +1,22 @@
-# TLDR
-Just use the makefile.
+# Pre-Reqs
+node v.14.10
+yarn
+
+# Using this Repo
+## Development
+```
+yarn && yarn start
+```
+## Upload to siasky
+```
+yarn && yarn upload
+✔ What do you want to use as your public directory? … build
+✔ Configure as a signle-page app (rewrite all urls to /index.html)? … yes
+✔ Wanna deploy web pages to Skynet using handshake domains ? … no
+```
+
+# Public Deployed Site (Probably an older version as I don't update this often)
+https://siasky.net/AAA6f5jNF0O8xxtObjf7HwWz_k-ozW8xxuEq2gjtdManQQ
 
 # functions of skydb
 - Version 4.0.0
