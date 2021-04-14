@@ -3,6 +3,7 @@ Just use the makefile.
 
 # functions of skydb
 - Version 4.0.0
+SkynetClient
 ```
 export declare class SkynetClient {
     customOptions: CustomClientOptions;
@@ -41,6 +42,57 @@ export declare class SkynetClient {
         setEntry: (privateKey: string, entry: import("./registry").RegistryEntry, customOptions?: import("./utils/skylink").BaseCustomOptions | undefined) => Promise<void>;
         postSignedEntry: (publicKey: string, entry: import("./registry").RegistryEntry, signature: Uint8Array, customOptions?: import("./utils/skylink").BaseCustomOptions | undefined) => Promise<void>;
     };
+```
+
+MySky
+```
+export declare class MySky {
+    protected connector: Connector;
+    protected hostDomain: string;
+    static instance: MySky | null;
+    dacs: DacLibrary[];
+    grantedPermissions: Permission[];
+    pendingPermissions: Permission[];
+    constructor(connector: Connector, permissions: Permission[], hostDomain: string);
+    static New(client: SkynetClient, skappDomain?: string, customOptions?: CustomConnectorOptions): Promise<MySky>;
+    /**
+     * Loads the given DACs.
+     */
+    loadDacs(...dacs: DacLibrary[]): Promise<void>;
+    addPermissions(...permissions: Permission[]): Promise<void>;
+    checkLogin(): Promise<boolean>;
+    /**
+     * Destroys the mysky connection by:
+     *
+     * 1. Destroying the connected DACs,
+     *
+     * 2. Closing the connection,
+     *
+     * 3. Closing the child iframe
+     */
+    destroy(): Promise<void>;
+    logout(): Promise<void>;
+    requestLoginAccess(): Promise<boolean>;
+    userID(): Promise<string>;
+    getJSON(path: string, opts?: CustomGetJSONOptions): Promise<JSONResponse>;
+    setJSON(path: string, json: JsonData, opts?: CustomSetJSONOptions): Promise<JSONResponse>;
+    protected catchError(errorMsg: string): Promise<void>;
+    protected launchUI(): Promise<Window>;
+    protected connectUi(childWindow: Window): Promise<Connection>;
+    protected loadDac(dac: DacLibrary): Promise<void>;
+    protected handleLogin(loggedIn: boolean): void;
+    protected signRegistryEntry(entry: RegistryEntry, path: string): Promise<Signature>;
+}
+```
+
+ContentRecordDAC
+```
+export declare class ContentRecordDAC extends DacLibrary implements IContentRecordDAC {
+    constructor();
+    getPermissions(): Permission[];
+    recordNewContent(...data: IContentCreation[]): Promise<IDACResponse>;
+    recordInteraction(...data: IContentInteraction[]): Promise<IDACResponse>;
+}
 ```
 
 # Original README

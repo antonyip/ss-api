@@ -29,16 +29,21 @@ export default function Header() {
     <div className={classes.root}>
       <AppBar color='transparent' position='static'>
         <Toolbar>
-          <img className={classes.logo} src="https://i.imgur.com/uk28IEx.png" alt='logo' />
+          <img className={classes.logo} src="https://siasky.net/docs/images/logo-42407883.png" alt='logo' />
 
           <Link to='/' className={classes.rmd}>
             <Button className={classes.bl} color='inherit'>
-              <h3>Post</h3>
+              <h3>API</h3>
             </Button>
           </Link>
-          <Link to='/view' className={classes.rmd}>
+          <Link to='/app' className={classes.rmd}>
             <Button className={classes.bl} color='inherit'>
-              <h3>TownSquare</h3>
+              <h3>App</h3>
+            </Button>
+          </Link>
+          <Link to='/stats' className={classes.rmd}>
+            <Button className={classes.bl} color='inherit'>
+              <h3>Stats</h3>
             </Button>
           </Link>
         </Toolbar>

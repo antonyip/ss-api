@@ -5,7 +5,8 @@ import { makeStyles, Paper, Grid, Button, TextField } from '@material-ui/core';
 //import SearchIcon from '@material-ui/icons/Search';
 //import axiosClient from 'api/axiosClient';
 //import PostCard from 'components/PostCard';
-import { SkynetClient, parseSkylink,  deriveChildSeed, genKeyPairAndSeed, genKeyPairFromSeed} from 'skynet-js'
+import { SkynetClient, parseSkylink,  deriveChildSeed, genKeyPairFromSeed} from 'skynet-js'
+import { ContentRecordDAC } from "@skynetlabs/content-record-library";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -260,36 +261,18 @@ export default function View() {
   }
 
   const Tut_60_SkyKeys = async() => {   
-    // Old Stuffs from Tut_40..
-    try {
-      const mySkyClient = new SkynetClient("https://siasky.net");
-      const dataKey = "MyAppDomain";
-      // Load MySky
-      const mySky = await mySkyClient.loadMySky(dataKey)
-  
-      // Load the pop up menu for people to login
-      const isLoggedIn = await mySky.checkLogin()
-      if (!isLoggedIn)
-      {
-        await mySky.requestLoginAccess()
-      }
-  
-      // get the user id - to generate a child seed from your master seed
-      const userID = await mySky.userID()
-  
-      const masterKey = genKeyPairFromSeed("this is your application master seed that only you should know and never expose to the internets");
-  
-      const childSeed = deriveChildSeed(masterKey.privateKey, userID);
+      try {
+        const client = new SkynetClient("https://siasky.net");
+        const mySky = await client.loadMySky("MyAppDomain");
 
-      const childKeys = genKeyPairFromSeed(childSeed);
-  
-      // new Stuffs after previous tutorial
-      // Reading Data to from client db
-    }
-    catch (error)
-    {
-      console.log(error.message);
-    }
+        // Initialize DAC, auto-adding permissions.
+        const dac = new ContentRecordDAC()
+        await mySky.loadDacs(dac);
+      }
+      catch (error)
+      {
+        console.log(error.message)
+      }
   }
 
 

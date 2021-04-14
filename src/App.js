@@ -4,6 +4,8 @@ import { HashRouter, Switch, Route } from 'react-router-dom';
 import Header from './components/Header';
 
 import API from 'views/API';
+import MyApp from 'views/MyApp';
+import Stats from 'views/Stats';
 
 import 'easymde/dist/easymde.min.css';
 import './App.css';
@@ -34,6 +36,8 @@ function App() {
         <Container className={classes.ch}>
           <Switch>
             <Route exact path='/' component={API} />
+            <Route exact path='/app' component={MyApp} />
+            <Route exact path='/stats' component={Stats} />
           </Switch>
         </Container>
       </div>
