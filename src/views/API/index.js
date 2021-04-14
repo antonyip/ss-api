@@ -260,7 +260,7 @@ export default function View() {
       }
   }
 
-  const Tut_60_SkyKeys = async() => {   
+  const Tut_60_Dac = async() => {   
       try {
         const client = new SkynetClient("https://siasky.net");
         const mySky = await client.loadMySky("MyAppDomain");
@@ -268,6 +268,8 @@ export default function View() {
         // Initialize DAC, auto-adding permissions.
         const dac = new ContentRecordDAC()
         await mySky.loadDacs(dac);
+        const res = await dac.recordNewContent({skylink: "mystring", metadata: {"a":"a", "b":"b"}})
+        console.log(res)
       }
       catch (error)
       {
@@ -422,8 +424,27 @@ export default function View() {
           </Grid>
         </Grid>
 
+{/* SkynetClient-SkyDB DAC Handling(Browser-JS) */}
+<Grid container className={classes.tut_item}>
+          <Grid item xs={12}>
+            <Paper className={classes.paper} alignitems="center"><p>SkynetClient-SkyDB DAC Handling(Browser-JS)</p></Paper>
+          </Grid>
+        </Grid>
 
-
+        <Grid container className={classes.tut_item}>
+          <Grid item className={classes.tut_left} xs={8}>
+            <Paper className={classes.paper}>
+              Reading Application Data based on Generated Child Seed<br></br>
+            </Paper>
+          </Grid>
+          <Grid item className={classes.tut_right} xs={4}>
+            <Paper className={classes.paper}>
+              {/* <TextField label="App Domain" onChange={(event) => setTut_40_AppDomain(event.target.value)} value={Tut_40_AppDomain} variant="standard"></TextField><br></br> */}
+              {/* <TextField label="App MasterSeed" onChange={(event) => setTut_40_AppMasterSeed(event.target.value)} value={Tut_40_AppMasterSeed} variant="standard"></TextField><br></br> */}
+              <Button variant='outlined' style={{ color: 'black' }} onClick={() => Tut_60_Dac()}>Create</Button>
+            </Paper>
+          </Grid>
+        </Grid>
 
 
       </Grid>
