@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-//import ReactMarkdown from 'react-markdown';
+import ReactMarkdown from 'react-markdown';
 //import { makeStyles, Paper, InputBase, IconButton, Grid, Button } from '@material-ui/core';
 import { makeStyles, Paper, Grid, Button, TextField } from '@material-ui/core';
 //import SearchIcon from '@material-ui/icons/Search';
@@ -8,35 +8,13 @@ import { makeStyles, Paper, Grid, Button, TextField } from '@material-ui/core';
 import { SkynetClient, parseSkylink,  deriveChildSeed, genKeyPairFromSeed} from 'skynet-js'
 import { ContentRecordDAC } from "@skynetlabs/content-record-library";
 
+
 const useStyles = makeStyles((theme) => ({
   root: {
     paddingTop: '15vh',
     flexGrow: 1,
   },
-  pt: {
-    padding: '5px 15px',
-  },
 
-  bt: {
-    padding: '2px 4px',
-    display: 'flex',
-    alignItems: 'center',
-    width: '99%',
-  },
-  mgb: {
-    marginBottom: '30px',
-  },
-  input: {
-    marginLeft: theme.spacing(1),
-    flex: 1,
-  },
-  iconButton: {
-    padding: 10,
-  },
-  divider: {
-    height: 28,
-    margin: 4,
-  },
   paper: {
     height: "100%",
     margin: 1,
@@ -44,6 +22,9 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: 15,
     elevation: 30,
     spacing: 5
+  },
+  tut_input: {
+    width: "100%"
   },
   tut_left: {
     height: "100%",
@@ -58,15 +39,114 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
+const example_md = `A paragraph with *emphasis* and **strong importance**.
+
+> A block quote with ~strikethrough~ and a URL: https://reactjs.org.
+
+* Lists
+* [ ] todo
+* [x] done
+
+A table:
+
+| a | b |
+| - | - |
+`
+
+const title_md =`
+# SkynetClient API Usage (Browser-JS)
+`
+const tut1_md =`
+  ## Creating a Skynet Connection
+  ~~~js
+  // Entry point of all SkynetClients 
+  // - you should leave this empty on a production system
+  // e.g. const mySkyClient = new SkynetClient();
+  try {
+
+  const mySkyClient = new SkynetClient(Tut1_URL);
+  // Load MySky
+  const mySky = await mySkyClient.loadMySky(Tut1_MyDomain)
+
+  // Load the pop up menu for people to login
+  await mySky.requestLoginAccess()
+
+  // get the user id - for testing purposes
+  const userID = await mySky.userID()
+
+  setTut1_ReturnValue(userID)
+  console.log(userID)
+  }
+  catch (error)
+  {
+    console.log(error.message);
+  }
+  ~~~
+`
+const tut2_md =`
+  ## Opening a new Browser Tab a file from Skynet
+  ~~~js
+  const mySkyClient = new SkynetClient("https://siasky.net");
+
+  // Open a new tab in your browser
+  console.log(parseSkylink(Tut2_State));
+  const returnString = await mySkyClient.openFile(parseSkylink(Tut2_State));
+  console.log(returnString)
+  ~~~
+`
+const tut3_md =`
+  ## Reading a file from Skynet
+  ~~~js
+  // Entry point of all SkynetClients 
+  // - you should leave this empty on a production system
+  // e.g. const mySkyClient = new SkynetClient();
+  const mySkyClient = new SkynetClient("https://siasky.net");
+
+  // Open a new tab in your browser
+  console.log(parseSkylink(Tut2a_State))
+  const returnString = await mySkyClient.getFileContent(parseSkylink(Tut2a_State));
+  console.log(returnString)
+  setTut2a_ReturnValue(returnString.data)
+  ~~~
+`
+
+const tut4_md =`
+  ## Uploading a file to Skynet
+  Takes about 1 minute to upload...
+  ~~~js
+  // Entry point of all SkynetClients 
+  try{
+    const mySkyClient = new SkynetClient("https://siasky.net");
+    var blob = new Blob(
+      [
+        Tut3_Text
+      ],
+      { type: 'text/html' }
+    );
+    // Open a new tab in your browser
+    const returnString = await mySkyClient.uploadFile(blob)
+    console.log(returnString)
+  }
+  catch (error)
+  {
+    console.log(error.message);
+  }
+  ~~~
+`
+
+const myuser_md =`# SkynetClient-MySky User Handling`
+
+
 export default function View() {
   const classes = useStyles();
   var [Tut1_URL, setTut1_URL] = useState("https://siasky.net");
   var [Tut1_MyDomain, setTut1_MyDomain] = useState("MyAppDomain");
   var [Tut1_ReturnValue, setTut1_ReturnValue] = useState('');
   var [Tut2_State, setTut2_State] = useState('XABvi7JtJbQSMAcDwnUnmp2FKDPjg8_tTTFP4BwMSxVdEg');
-  var [Tut2a_State, setTut2a_State] = useState('AACaACU9sCXunPdbvC6x6ZGoj595vmpZP0b-VeyuW_zTSA');
+  var [Tut2a_State, setTut2a_State] = useState('AADAzrRtsa4KB5tN4QUOJnRxD3-DWRSSbDonpWq9xHq5WQ');
+  var [Tut2a_ReturnValue, setTut2a_ReturnValue] = useState('');
   var [Tut3_Text, setTut3_Text] = useState('<html><body><h1>Hello World!</h1></body></html>');
-
+  var [Tut4_ReturnValue, setTut4_ReturnValue] = useState('');
 //  var [Tut_40_MyUserID, setTut_40_MyUserID]= useState("b4f9e43178222cf33bd4432dc1eca49499397ecd1f7de23b568f3fa1e72e5c7c")
   var [Tut_40_AppDomain, setTut_40_AppDomain]= useState("MyAppDomain")
   var [Tut_40_AppMasterSeed, setTut_40_AppMasterSeed]= useState("this is your application master seed that only you should know and never expose to the internets")
@@ -116,9 +196,10 @@ export default function View() {
     const mySkyClient = new SkynetClient("https://siasky.net");
 
     // Open a new tab in your browser
-    console.log(parseSkylink(Tut2a_State));
+    console.log(parseSkylink(Tut2a_State))
     const returnString = await mySkyClient.getFileContent(parseSkylink(Tut2a_State));
     console.log(returnString)
+    setTut2a_ReturnValue(returnString.data)
   };
 
   const Tut_UploadFile = async () => {
@@ -127,18 +208,16 @@ export default function View() {
     // e.g. const mySkyClient = new SkynetClient();
     try{
       const mySkyClient = new SkynetClient("https://siasky.net");
-
-      var title = 'title'
-      var body = 'body'
       var blob = new Blob(
         [
-          title + "\n" + body
+          Tut3_Text
         ],
         { type: 'text/html' }
       );
       // Open a new tab in your browser
       const returnString = await mySkyClient.uploadFile(blob)
       console.log(returnString)
+      setTut4_ReturnValue(returnString.skylink)
     }
     catch (error)
     {
@@ -277,6 +356,22 @@ export default function View() {
       }
   }
 
+  const Tut_61_Dac = async() => {   
+    try {
+      const client = new SkynetClient("https://siasky.net");
+      const mySky = await client.loadMySky("MyAppDomain");
+
+      // Initialize DAC, auto-adding permissions.
+      const dac = new ContentRecordDAC()
+      await mySky.loadDacs(dac);
+      const res = await dac.recordInteraction({skylink: "mystring", metadata: {"a":"a", "b":"b"}})
+      console.log(res)
+    }
+    catch (error)
+    {
+      console.log(error.message)
+    }
+}
 
   return (
     <div className={classes.root}>
@@ -290,7 +385,9 @@ export default function View() {
           >
         <Grid container className={classes.tut_item}>
           <Grid item xs={12}>
-            <Paper className={classes.paper} alignitems="center"><p>SkynetClient API Usage (Browser-JS)</p></Paper>
+            <Paper className={classes.paper} alignitems="center">
+            <ReactMarkdown source={title_md} />
+            </Paper>
           </Grid>
         </Grid>
 
@@ -299,20 +396,15 @@ export default function View() {
         <Grid container className={classes.tut_item}>
           <Grid item className={classes.tut_left} xs={8}>
             <Paper className={classes.paper}>
-              Creating a Skynet Connection<br />
-              const mySkyClient = new SkynetClient("https://siasky.net")<br />
-              const mySky = await mySkyClient.loadMySky("MyAppDomain")<br />
-              await mySky.requestLoginAccess()<br />
-              const userID = await mySky.userID()<br />
-              console.log(userID)<br />
+              <ReactMarkdown source={tut1_md} />
             </Paper>
           </Grid>
           <Grid item className={classes.tut_right} xs={4}>
             <Paper className={classes.paper}>
-              <TextField required label="SkynetPortal" value={Tut1_URL} onChange={(event) => setTut1_URL(event.target.value)} variant="standard">https://siasky.net</TextField> <br></br><br></br>
-              <TextField required label="YourAppDomain" onChange={(event) => setTut1_MyDomain(event.target.value)} value={Tut1_MyDomain} variant="standard">MyAppDomain</TextField><br></br><br></br>
+              <TextField style={{width: "95%"}} required label="SkynetPortal" value={Tut1_URL} onChange={(event) => setTut1_URL(event.target.value)} variant="standard">https://siasky.net</TextField> <br></br><br></br>
+              <TextField style={{width: "95%"}} required label="YourAppDomain" onChange={(event) => setTut1_MyDomain(event.target.value)} value={Tut1_MyDomain} variant="standard">MyAppDomain</TextField><br></br><br></br>
               <Button variant='outlined' style={{ color: 'black' }} onClick={() => Tut_InitSkyNetClient()}>TriggerAPI</Button><br></br><br></br>
-              <TextField id="tut_rv1" label="ReturnValue" readOnly value={Tut1_ReturnValue} variant="standard"></TextField><br></br><br></br>
+              <TextField style={{width: "95%"}} id="tut_rv1" label="ReturnValue" readOnly value={Tut1_ReturnValue} variant="standard"></TextField><br></br><br></br>
             </Paper>
           </Grid>
         </Grid>
@@ -320,13 +412,12 @@ export default function View() {
         <Grid container className={classes.tut_item}>
           <Grid item className={classes.tut_left} xs={8}>
             <Paper className={classes.paper}>
-              Opening a new Browser Tab a file from Skynet
+              <ReactMarkdown source={tut2_md} />
             </Paper>
           </Grid>
           <Grid item className={classes.tut_right} xs={4}>
             <Paper className={classes.paper}>
-              Opening a file on SkyNet<br></br>
-              <TextField label="XABvi7JtJbQSMAcDwnUnmp2FKDPjg8_tTTFP4BwMSxVdEg" onChange={(event) => setTut2_State(event.target.value)} value={Tut2_State} variant="standard" helperText="sialink"></TextField><br></br>
+              <TextField style={{width: "95%"}} label="sialink://" onChange={(event) => setTut2_State(event.target.value)} value={Tut2_State} variant="standard" helperText="sialink"></TextField><br></br>
               <Button variant='outlined' style={{ color: 'black' }} onClick={() => Tut_OpenFile()}>Open a file on Skynet</Button>
             </Paper>
           </Grid>
@@ -335,14 +426,14 @@ export default function View() {
         <Grid container className={classes.tut_item}>
           <Grid item className={classes.tut_left} xs={8}>
             <Paper className={classes.paper}>
-              Reading a file from Skynet
+              <ReactMarkdown source={tut3_md} />
             </Paper>
           </Grid>
           <Grid item className={classes.tut_right} xs={4}>
             <Paper className={classes.paper}>
-              Reading a file on SkyNet<br></br>
-              <TextField label="XABvi7JtJbQSMAcDwnUnmp2FKDPjg8_tTTFP4BwMSxVdEg" onChange={(event) => setTut2a_State(event.target.value)} value={Tut2a_State} variant="standard" helperText="sialink"></TextField><br></br>
+              <TextField style={{width: "95%"}} label="sialink://" onChange={(event) => setTut2a_State(event.target.value)} value={Tut2a_State} variant="standard" helperText="sialink"></TextField><br></br>
               <Button variant='outlined' style={{ color: 'black' }} onClick={() => Tut_ReadFile()}>Read a file on Skynet</Button>
+              <TextField style={{width: "95%"}} label="ReturnValue" readOnly value={Tut2a_ReturnValue} variant="standard" helperText="sialink"></TextField><br></br>
             </Paper>
           </Grid>
         </Grid>
@@ -350,22 +441,23 @@ export default function View() {
         <Grid container className={classes.tut_item}>
           <Grid item className={classes.tut_left} xs={8}>
             <Paper className={classes.paper}>
-              Uploading a file to Skynet<br></br>
-              Takes about 1 minute to upload.. <br></br>
+              <ReactMarkdown source={tut4_md} />
             </Paper>
           </Grid>
           <Grid item className={classes.tut_right} xs={4}>
             <Paper className={classes.paper}>
-              Uploading a file on SkyNet<br></br>
-              <TextField label="My User Text" onChange={(event) => setTut3_Text(event.target.value)} value={Tut3_Text} variant="standard"></TextField><br></br>
-              <Button variant='outlined' style={{ color: 'black' }} onClick={() => Tut_UploadFile()}>UploadText</Button>
+              <TextField style={{width: "95%"}} label="My User Text" onChange={(event) => setTut3_Text(event.target.value)} value={Tut3_Text} variant="standard"></TextField><br></br>
+              <Button variant='outlined' style={{ color: 'black' }} onClick={() => Tut_UploadFile()}>UploadText</Button><br></br>
+              <TextField style={{width: "95%"}} label="ReturnValue" readOnly value={Tut4_ReturnValue} variant="standard" helperText="sialink"></TextField>
             </Paper>
           </Grid>
         </Grid>
 
         <Grid container className={classes.tut_item}>
           <Grid item xs={12}>
-            <Paper className={classes.paper} alignitems="center"><p>SkynetClient-MySky User Handling(Browser-JS)</p></Paper>
+            <Paper className={classes.paper} alignitems="center">
+              <ReactMarkdown source={myuser_md} />
+            </Paper>
           </Grid>
         </Grid>
 
@@ -378,9 +470,8 @@ export default function View() {
           </Grid>
           <Grid item className={classes.tut_right} xs={4}>
             <Paper className={classes.paper}>
-              {/* <TextField label="User's UserID" onChange={(event) => setTut_40_MyUserId(event.target.value)} value={Tut_40_MyUserId} variant="standard"></TextField><br></br> */}
-              <TextField label="App Domain" onChange={(event) => setTut_40_AppDomain(event.target.value)} value={Tut_40_AppDomain} variant="standard"></TextField><br></br>
-              <TextField label="App MasterSeed" onChange={(event) => setTut_40_AppMasterSeed(event.target.value)} value={Tut_40_AppMasterSeed} variant="standard"></TextField><br></br>
+              <TextField style={{width: "95%"}} label="App Domain" onChange={(event) => setTut_40_AppDomain(event.target.value)} value={Tut_40_AppDomain} variant="standard"></TextField><br></br>
+              <TextField style={{width: "95%"}} label="App MasterSeed" onChange={(event) => setTut_40_AppMasterSeed(event.target.value)} value={Tut_40_AppMasterSeed} variant="standard"></TextField><br></br>
               <Button variant='outlined' style={{ color: 'black' }} onClick={() => Tut_CreateUserSeedForYourApp()}>Create</Button>
             </Paper>
           </Grid>
@@ -434,7 +525,7 @@ export default function View() {
         <Grid container className={classes.tut_item}>
           <Grid item className={classes.tut_left} xs={8}>
             <Paper className={classes.paper}>
-              Reading Application Data based on Generated Child Seed<br></br>
+            Create (DAC) 
             </Paper>
           </Grid>
           <Grid item className={classes.tut_right} xs={4}>
@@ -442,6 +533,21 @@ export default function View() {
               {/* <TextField label="App Domain" onChange={(event) => setTut_40_AppDomain(event.target.value)} value={Tut_40_AppDomain} variant="standard"></TextField><br></br> */}
               {/* <TextField label="App MasterSeed" onChange={(event) => setTut_40_AppMasterSeed(event.target.value)} value={Tut_40_AppMasterSeed} variant="standard"></TextField><br></br> */}
               <Button variant='outlined' style={{ color: 'black' }} onClick={() => Tut_60_Dac()}>Create</Button>
+            </Paper>
+          </Grid>
+        </Grid>
+
+        <Grid container className={classes.tut_item}>
+          <Grid item className={classes.tut_left} xs={8}>
+            <Paper className={classes.paper}>
+            Interact (DAC) 
+            </Paper>
+          </Grid>
+          <Grid item className={classes.tut_right} xs={4}>
+            <Paper className={classes.paper}>
+              {/* <TextField label="App Domain" onChange={(event) => setTut_40_AppDomain(event.target.value)} value={Tut_40_AppDomain} variant="standard"></TextField><br></br> */}
+              {/* <TextField label="App MasterSeed" onChange={(event) => setTut_40_AppMasterSeed(event.target.value)} value={Tut_40_AppMasterSeed} variant="standard"></TextField><br></br> */}
+              <Button variant='outlined' style={{ color: 'black' }} onClick={() => Tut_61_Dac()}>Interact</Button>
             </Paper>
           </Grid>
         </Grid>

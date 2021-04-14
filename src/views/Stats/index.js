@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 //import ReactMarkdown from 'react-markdown';
 //import { makeStyles, Paper, InputBase, IconButton, Grid, Button } from '@material-ui/core';
-import { makeStyles, Paper, Grid, Button, TextField } from '@material-ui/core';
+import { makeStyles, Button, Paper } from '@material-ui/core';
 //import SearchIcon from '@material-ui/icons/Search';
 //import axiosClient from 'api/axiosClient';
 //import PostCard from 'components/PostCard';
-import { SkynetClient, parseSkylink,  deriveChildSeed, genKeyPairAndSeed, genKeyPairFromSeed} from 'skynet-js'
+//import { SkynetClient, parseSkylink,  deriveChildSeed, genKeyPairAndSeed, genKeyPairFromSeed} from 'skynet-js'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -48,10 +48,14 @@ const useStyles = makeStyles((theme) => ({
 
 export default function View() {
   const classes = useStyles();
-
+const raiseInvoiceClicked = () => {
+  window.open("https://skey.hns.siasky.net", "_blank")
+}
   return (
     <div className={classes.root}>
-      Stats Page
+      <Paper>
+        <Button onClick={raiseInvoiceClicked}>External Website</Button>
+      </Paper>
     </div>
   );
 }
