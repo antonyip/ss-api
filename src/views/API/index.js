@@ -63,19 +63,22 @@ const tut1_md =`
   // - you should leave this empty on a production system
   // e.g. const mySkyClient = new SkynetClient();
   try {
+    const mySkyClient = new SkynetClient(%SkyNetPortal%);
+    // Load MySky
+    const mySky = await mySkyClient.loadMySky(Tut1_MyDomain)
 
-  const mySkyClient = new SkynetClient(Tut1_URL);
-  // Load MySky
-  const mySky = await mySkyClient.loadMySky(Tut1_MyDomain)
+    // Load the pop up menu for people to login
+    const isLoggedIn = await mySky.checkLogin()
+    if (!isLoggedIn)
+    {
+      await mySky.requestLoginAccess()
+    }
 
-  // Load the pop up menu for people to login
-  await mySky.requestLoginAccess()
+    // get the user id - for testing purposes
+    const userID = await mySky.userID()
 
-  // get the user id - for testing purposes
-  const userID = await mySky.userID()
-
-  setTut1_ReturnValue(userID)
-  console.log(userID)
+    setTut1_ReturnValue(userID)
+    console.log(userID)
   }
   catch (error)
   {
@@ -83,15 +86,23 @@ const tut1_md =`
   }
   ~~~
 `
+
+const tut1a_md =`
+  ## Logout
+  ~~~js
+  const mySkyClient = new SkynetClient();
+  const mySky = await mySkyClient.loadMySky()
+  mySky.logout()
+  ~~~
+`
+
 const tut2_md =`
   ## Opening a new Browser Tab a file from Skynet
   ~~~js
   const mySkyClient = new SkynetClient("https://siasky.net");
 
   // Open a new tab in your browser
-  console.log(parseSkylink(Tut2_State));
   const returnString = await mySkyClient.openFile(parseSkylink(Tut2_State));
-  console.log(returnString)
   ~~~
 `
 const tut3_md =`
@@ -136,7 +147,7 @@ const tut4_md =`
 
 const myuser_md =`# SkynetClient-MySky User Handling`
 
-
+const myuserdata_md =`# SkynetClient-SkyDB UserData Handling`
 export default function View() {
   const classes = useStyles();
   var [Tut1_URL, setTut1_URL] = useState("https://siasky.net");
@@ -163,7 +174,11 @@ export default function View() {
     const mySky = await mySkyClient.loadMySky(Tut1_MyDomain)
 
     // Load the pop up menu for people to login
-    await mySky.requestLoginAccess()
+    const isLoggedIn = await mySky.checkLogin()
+    if (!isLoggedIn)
+    {
+      await mySky.requestLoginAccess()
+    }
 
     // get the user id - for testing purposes
     const userID = await mySky.userID()
@@ -176,6 +191,12 @@ export default function View() {
       console.log(error.message);
     }
   };
+
+  const Tut_Logout = async () => {
+    const mySkyClient = new SkynetClient();
+    const mySky = await mySkyClient.loadMySky()
+    mySky.logout()
+  }
 
   const Tut_OpenFile = async () => {
     // Entry point of all SkynetClients 
@@ -412,6 +433,21 @@ export default function View() {
         <Grid container className={classes.tut_item}>
           <Grid item className={classes.tut_left} xs={8}>
             <Paper className={classes.paper}>
+              <ReactMarkdown source={tut1a_md} />
+            </Paper>
+          </Grid>
+          <Grid item className={classes.tut_right} xs={4}>
+            <Paper className={classes.paper}>
+              <Button variant='outlined' style={{ color: 'black' }} onClick={() => Tut_Logout()}>Logout</Button><br></br><br></br>
+            </Paper>
+          </Grid>
+        </Grid>
+
+        
+
+        <Grid container className={classes.tut_item}>
+          <Grid item className={classes.tut_left} xs={8}>
+            <Paper className={classes.paper}>
               <ReactMarkdown source={tut2_md} />
             </Paper>
           </Grid>
@@ -480,7 +516,8 @@ export default function View() {
 {/* SkynetClient-SkyDB UserData Handling(Browser-JS) */}
         <Grid container className={classes.tut_item}>
           <Grid item xs={12}>
-            <Paper className={classes.paper} alignitems="center"><p>SkynetClient-SkyDB UserData Handling(Browser-JS)</p></Paper>
+            <Paper className={classes.paper} alignitems="center">
+              <ReactMarkdown source={myuserdata_md} /></Paper>
           </Grid>
         </Grid>
 

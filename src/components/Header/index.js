@@ -46,6 +46,11 @@ export default function Header() {
               <h3>Stats</h3>
             </Button>
           </Link>
+          <Link to='/credits' className={classes.rmd}>
+            <Button className={classes.bl} color='inherit'>
+              <h3>Credits</h3>
+            </Button>
+          </Link>
         </Toolbar>
       </AppBar>
     </div>

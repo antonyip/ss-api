@@ -6,6 +6,7 @@ import Header from './components/Header';
 import API from 'views/API';
 import MyApp from 'views/MyApp';
 import Stats from 'views/Stats';
+import Credits from 'views/Credits';
 
 import 'easymde/dist/easymde.min.css';
 import './App.css';
@@ -38,6 +39,7 @@ function App() {
             <Route exact path='/' component={API} />
             <Route exact path='/app' component={MyApp} />
             <Route exact path='/stats' component={Stats} />
+            <Route exact path='/credits' component={Credits} />
           </Switch>
         </Container>
       </div>
