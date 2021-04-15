@@ -18,9 +18,9 @@ yarn build && yarn siasky
 # Public Deployed Site
 https://siasky.net/AAAGR5D19nL6v9MXXjDBWqAxA68Ysu1Pahf4j-8LHCaK5A/
 
-# functions of skydb
-- Version 4.0.0
+# Functions of skydb
 SkynetClient
+- Version 4.0.1@beta
 ```
 export declare class SkynetClient {
     customOptions: CustomClientOptions;
@@ -62,6 +62,7 @@ export declare class SkynetClient {
 ```
 
 MySky
+- Version 4.0.1@beta
 ```
 export declare class MySky {
     protected connector: Connector;
@@ -103,6 +104,7 @@ export declare class MySky {
 ```
 
 ContentRecordDAC
+- Version 4.0.1@beta
 ```
 export declare class ContentRecordDAC extends DacLibrary implements IContentRecordDAC {
     constructor();
