@@ -57,6 +57,7 @@ export default function View() {
       <div>siasky-hosting - https://github.com/vinhyenvodoi98/siasky-hosting</div>
       <div>siasky-starter-pack - https://github.com/vinhyenvodoi98/EZ-Web-Own-the-internet-Hackathon</div>
       <div>tracker for DAC - https://skey.hns.siasky.net</div>
+      <div>skynet-workshop - https://github.com/SkynetLabs/skynet-workshop</div>
     </div>
   );
 }

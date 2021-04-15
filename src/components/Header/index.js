@@ -36,16 +36,16 @@ export default function Header() {
               <h3>API</h3>
             </Button>
           </Link>
-          <Link to='/app' className={classes.rmd}>
+          {/* <Link to='/app' className={classes.rmd}>
             <Button className={classes.bl} color='inherit'>
               <h3>App</h3>
             </Button>
-          </Link>
-          <Link to='/stats' className={classes.rmd}>
+          </Link> */}
+          {/* <Link to='/stats' className={classes.rmd}>
             <Button className={classes.bl} color='inherit'>
               <h3>Stats</h3>
             </Button>
-          </Link>
+          </Link> */}
           <Link to='/credits' className={classes.rmd}>
             <Button className={classes.bl} color='inherit'>
               <h3>Credits</h3>

@@ -144,15 +144,59 @@ const tut4_md =`
   }
   ~~~
 `
+const tut_50_md =`
+Writing Application Data based on Generated Child Seed
+`
+const tut_51_md =`
+Reading Application Data based on Generated Child Seed
+`
 
 const myuser_md =`# User Handling`
 
 const myuserdata_md =`# UserData Handling`
 
-const mydac_md =`# DAC Handling
-You have to go to https://skey.hns.siasky.net/ to retrieve the records as the interface doesn't allow you to.
+const mydac_md =`# Content Record Data Access Control (DAC) Handling
+You have to go to https://skey.hns.siasky.net/ to retrieve the records as the Browser-JS doesn't allow you to.
+`
+const myuserseeds_md =`
+Creating User Seeds  
+~~~js
+try {
+    const mySkyClient = new SkynetClient("https://siasky.net");
+
+    // Load MySky
+    const mySky = await mySkyClient.loadMySky(Tut_40_AppDomain)
+
+    // Load the pop up menu for people to login
+    const isLoggedIn = await mySky.checkLogin()
+    if (!isLoggedIn)
+    {
+      await mySky.requestLoginAccess()
+    }
+
+    // get the user id - to generate a child seed from your master seed
+    const userID = await mySky.userID()
+
+    const { publicKey, privateKey } = genKeyPairFromSeed(Tut_40_AppMasterSeed);
+
+    const childSeed = deriveChildSeed(privateKey, userID);
+
+    console.log(childSeed)
+    setTut_40_ReturnValue(childSeed)
+  }
+  catch (error)
+  {
+    console.log(error.message);
+  }
+~~~
+`
+const tut_55_md =`
+Getting Discoverable Json
 `
 
+const tut_56_md =`
+Setting Discoverable Json
+`
 
 export default function View() {
   const classes = useStyles();
@@ -167,7 +211,25 @@ export default function View() {
 //  var [Tut_40_MyUserID, setTut_40_MyUserID]= useState("b4f9e43178222cf33bd4432dc1eca49499397ecd1f7de23b568f3fa1e72e5c7c")
   var [Tut_40_AppDomain, setTut_40_AppDomain]= useState("MyAppDomain")
   var [Tut_40_AppMasterSeed, setTut_40_AppMasterSeed]= useState("this is your application master seed that only you should know and never expose to the internets")
-
+  var [Tut_40_ReturnValue, setTut_40_ReturnValue]= useState("")
+  var [Tut_50_Data, setTut_50_Data]= useState("This is some example JSON data new. From antAPI")
+  var [Tut_50_ReturnValue, setTut_50_ReturnValue]= useState("")
+  var [Tut_50_ReturnValue2, setTut_50_ReturnValue2]= useState("")
+  var [Tut_55_Path, setTut_55_Path]= useState("MyAppDomain/MyPath")
+  var [Tut_56_Message, setTut_56_Message]= useState("Hello World!")
+  var [Tut_56_Path, setTut_56_Path]= useState("MyAppDomain/MyPath")
+  var [Tut_55_RV1, setTut_55_RV1]= useState("")
+  var [Tut_55_RV2, setTut_55_RV2]= useState("")
+  var [Tut_56_RV1, setTut_56_RV1]= useState("")
+  var [Tut_56_RV2, setTut_56_RV2]= useState("")
+  
+  var [Tut_60_SkyLink, setTut_60_SkyLink]= useState("AAA6f5jNF0O8xxtObjf7HwWz_k-ozW8xxuEq2gjtdManQQ")
+  var [Tut_60_ReturnValue, setTut_60_ReturnValue]= useState("")
+  var [Tut_61_SkyLink, setTut_61_SkyLink]= useState("AAA6f5jNF0O8xxtObjf7HwWz_k-ozW8xxuEq2gjtdManQQ")
+  var [Tut_61_Action, setTut_61_Action]= useState("DefaultAction")
+  var [Tut_61_ReturnValue, setTut_61_ReturnValue]= useState("")
+  
+  
 
   const Tut_InitSkyNetClient = async () => {
     // Entry point of all SkynetClients 
@@ -253,7 +315,7 @@ export default function View() {
   };
 
 
-  const Tut_CreateUserSeedForYourApp = async () => {
+  const Tut_40_CreateUserSeedForYourApp = async () => {
     // Entry point of all SkynetClients 
     // - you should leave this empty on a production system
     // e.g. const mySkyClient = new SkynetClient();
@@ -279,6 +341,7 @@ export default function View() {
     const childSeed = deriveChildSeed(privateKey, userID);
 
     console.log(childSeed)
+    setTut_40_ReturnValue(childSeed)
     }
     catch (error)
     {
@@ -289,36 +352,37 @@ export default function View() {
   const Tut_50_WritingData = async() => {   
     // Old Stuffs from Tut_40..
     try {
-      const mySkyClient = new SkynetClient("https://siasky.net");
-      const dataKey = "MyAppDomain";
-      // Load MySky
-      const mySky = await mySkyClient.loadMySky(dataKey)
-  
-      // Load the pop up menu for people to login
-      const isLoggedIn = await mySky.checkLogin()
-      if (!isLoggedIn)
-      {
-        await mySky.requestLoginAccess()
-      }
-  
-      // get the user id - to generate a child seed from your master seed
-      const userID = await mySky.userID()
-  
-      const masterKey = genKeyPairFromSeed("this is your application master seed that only you should know and never expose to the internets");
-  
-      const childSeed = deriveChildSeed(masterKey.privateKey, userID);
+        const mySkyClient = new SkynetClient("https://siasky.net");
+        const dataKey = "MyAppDomain";
+        // Load MySky
+        const mySky = await mySkyClient.loadMySky(dataKey)
+    
+        // Load the pop up menu for people to login
+        const isLoggedIn = await mySky.checkLogin()
+        if (!isLoggedIn)
+        {
+          await mySky.requestLoginAccess()
+        }
+    
+        // get the user id - to generate a child seed from your master seed
+        const userID = await mySky.userID()
+    
+        const masterKey = genKeyPairFromSeed("this is your application master seed that only you should know and never expose to the internets");
+    
+        const childSeed = deriveChildSeed(masterKey.privateKey, userID)
 
-      const childKeys = genKeyPairFromSeed(childSeed);
-  
-      // new Stuffs after previous tutorial
-      // Writing Data to client db
-      const json = { example: "This is some example JSON data new. From antAPI" };
-      try {
-        const returnValue = await mySkyClient.db.setJSON(childKeys.privateKey, dataKey, json);
-        console.log(returnValue)
-      } catch (error) {
-        console.log(error);
-      }
+        const childKeys = genKeyPairFromSeed(childSeed)
+    
+        // Writing Data to client db
+        // "This is some example JSON data new. From antAPI"
+        const json = { example: Tut_50_Data , moreStuffs: "you can add more stuffs..." }
+        try {
+          const returnValue = await mySkyClient.db.setJSON(childKeys.privateKey, dataKey, json)
+          console.log(returnValue)
+          setTut_50_ReturnValue(returnValue.skylink)
+        } catch (error) {
+          console.log(error);
+        }
       }
       catch (error)
       {
@@ -356,6 +420,7 @@ export default function View() {
         const { data, skylink } = await mySkyClient.db.getJSON(childKeys.publicKey, dataKey);
         console.log(data)
         console.log(skylink)
+        setTut_50_ReturnValue2(data.example)
       } catch (error) {
         console.log(error);
       }
@@ -366,6 +431,60 @@ export default function View() {
       }
   }
 
+
+  const Tut_55_Json = async() => {
+    try {
+
+      const mySkyClient = new SkynetClient("https://siasky.net");
+      const dataKey = "MyAppDomain";
+      // Load MySky
+      const mySky = await mySkyClient.loadMySky(dataKey)
+  
+      // Load the pop up menu for people to login
+      const isLoggedIn = await mySky.checkLogin()
+      if (!isLoggedIn)
+      {
+        await mySky.requestLoginAccess()
+      }
+
+      // Get discoverable JSON data from the given path.
+      const { data, skylink } = await mySky.getJSON(Tut_55_Path);
+      console.log(data)
+      console.log(skylink)
+      setTut_55_RV1(data.message)
+      setTut_55_RV2(skylink)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const Tut_56_Json = async() => {
+    try {
+
+      const mySkyClient = new SkynetClient("https://siasky.net");
+      const dataKey = "MyAppDomain";
+      // Load MySky
+      const mySky = await mySkyClient.loadMySky(dataKey)
+  
+      // Load the pop up menu for people to login
+      const isLoggedIn = await mySky.checkLogin()
+      if (!isLoggedIn)
+      {
+        await mySky.requestLoginAccess()
+      }
+
+      // Set discoverable JSON data from the given path.
+      const { data, skylink } = await mySky.setJSON(Tut_56_Path, { message: Tut_56_Message });
+      console.log(data)
+      console.log(skylink)
+      setTut_56_RV1(data.message)
+      setTut_56_RV2(skylink)
+    } catch (error) {
+      console.log(error)
+    }
+
+  }
+
   const Tut_60_Dac = async() => {   
       try {
         const client = new SkynetClient("https://siasky.net");
@@ -374,8 +493,9 @@ export default function View() {
         // Initialize DAC, auto-adding permissions.
         const dac = new ContentRecordDAC()
         await mySky.loadDacs(dac);
-        const res = await dac.recordNewContent({skylink: "mystring", metadata: {"a":"a", "b":"b"}})
+        const res = await dac.recordNewContent({skylink: Tut_60_SkyLink, metadata: {action:"NotInUse?"}})
         console.log(res)
+        setTut_60_ReturnValue(res.submitted)
       }
       catch (error)
       {
@@ -391,8 +511,9 @@ export default function View() {
       // Initialize DAC, auto-adding permissions.
       const dac = new ContentRecordDAC()
       await mySky.loadDacs(dac);
-      const res = await dac.recordInteraction({skylink: "mystring", metadata: {"a":"a", "b":"b"}})
+      const res = await dac.recordInteraction({skylink: Tut_61_SkyLink, metadata: {action:Tut_61_Action}})
       console.log(res)
+      setTut_61_ReturnValue(res.submitted)
     }
     catch (error)
     {
@@ -431,7 +552,7 @@ export default function View() {
               <TextField style={{width: "95%"}} required label="SkynetPortal" value={Tut1_URL} onChange={(event) => setTut1_URL(event.target.value)} variant="standard">https://siasky.net</TextField> <br></br><br></br>
               <TextField style={{width: "95%"}} required label="YourAppDomain" onChange={(event) => setTut1_MyDomain(event.target.value)} value={Tut1_MyDomain} variant="standard">MyAppDomain</TextField><br></br><br></br>
               <Button variant='outlined' style={{ color: 'black' }} onClick={() => Tut_InitSkyNetClient()}>TriggerAPI</Button><br></br><br></br>
-              <TextField style={{width: "95%"}} id="tut_rv1" label="ReturnValue" readOnly value={Tut1_ReturnValue} variant="standard"></TextField><br></br><br></br>
+              <TextField style={{width: "95%"}} id="tut_rv1" label="ReturnValue - UserID" readOnly value={Tut1_ReturnValue} variant="standard"></TextField><br></br><br></br>
             </Paper>
           </Grid>
         </Grid>
@@ -473,7 +594,7 @@ export default function View() {
             <Paper className={classes.paper}>
               <TextField style={{width: "95%"}} label="sialink://" onChange={(event) => setTut2a_State(event.target.value)} value={Tut2a_State} variant="standard" helperText="sialink"></TextField><br></br>
               <Button variant='outlined' style={{ color: 'black' }} onClick={() => Tut_ReadFile()}>Read a file on Skynet</Button>
-              <TextField style={{width: "95%"}} label="ReturnValue" readOnly value={Tut2a_ReturnValue} variant="standard" helperText="sialink"></TextField><br></br>
+              <TextField style={{width: "95%"}} label="ReturnValue - RawHTML" readOnly value={Tut2a_ReturnValue} variant="standard"></TextField><br></br>
             </Paper>
           </Grid>
         </Grid>
@@ -488,7 +609,7 @@ export default function View() {
             <Paper className={classes.paper}>
               <TextField style={{width: "95%"}} label="My User Text" onChange={(event) => setTut3_Text(event.target.value)} value={Tut3_Text} variant="standard"></TextField><br></br>
               <Button variant='outlined' style={{ color: 'black' }} onClick={() => Tut_UploadFile()}>UploadText</Button><br></br>
-              <TextField style={{width: "95%"}} label="ReturnValue" readOnly value={Tut4_ReturnValue} variant="standard" helperText="sialink"></TextField>
+              <TextField style={{width: "95%"}} label="ReturnValue - SiaLink" readOnly value={Tut4_ReturnValue} variant="standard"></TextField>
             </Paper>
           </Grid>
         </Grid>
@@ -504,15 +625,15 @@ export default function View() {
         <Grid container className={classes.tut_item}>
           <Grid item className={classes.tut_left} xs={8}>
             <Paper className={classes.paper}>
-              Creating User Seeds<br></br>
-              You can login using the above login script to get your userid.
+            <ReactMarkdown source={myuserseeds_md} />
             </Paper>
           </Grid>
           <Grid item className={classes.tut_right} xs={4}>
             <Paper className={classes.paper}>
-              <TextField style={{width: "95%"}} label="App Domain" onChange={(event) => setTut_40_AppDomain(event.target.value)} value={Tut_40_AppDomain} variant="standard"></TextField><br></br>
-              <TextField style={{width: "95%"}} label="App MasterSeed" onChange={(event) => setTut_40_AppMasterSeed(event.target.value)} value={Tut_40_AppMasterSeed} variant="standard"></TextField><br></br>
-              <Button variant='outlined' style={{ color: 'black' }} onClick={() => Tut_CreateUserSeedForYourApp()}>Create Child Seed</Button>
+              <TextField style={{width: "95%"}} label="App Domain" onChange={(event) => setTut_40_AppDomain(event.target.value)} value={Tut_40_AppDomain} variant="standard"></TextField><br></br><br></br>
+              <TextField style={{width: "95%"}} label="App MasterSeed" onChange={(event) => setTut_40_AppMasterSeed(event.target.value)} value={Tut_40_AppMasterSeed} variant="standard"></TextField><br></br><br></br>
+              <Button variant='outlined' style={{ color: 'black' }} onClick={() => Tut_40_CreateUserSeedForYourApp()}>Create Child Seed</Button><br></br><br></br>
+              <TextField style={{width: "95%"}} label="ReturnValue - ChildSeed" readOnly value={Tut_40_ReturnValue} variant="standard"></TextField>
             </Paper>
           </Grid>
         </Grid>
@@ -529,14 +650,14 @@ export default function View() {
         <Grid container className={classes.tut_item}>
           <Grid item className={classes.tut_left} xs={8}>
             <Paper className={classes.paper}>
-              Writing Application Data based on Generated Child Seed<br></br>
+              <ReactMarkdown source={tut_50_md} />
             </Paper>
           </Grid>
           <Grid item className={classes.tut_right} xs={4}>
             <Paper className={classes.paper}>
-              {/* <TextField label="App Domain" onChange={(event) => setTut_40_AppDomain(event.target.value)} value={Tut_40_AppDomain} variant="standard"></TextField><br></br> */}
-              {/* <TextField label="App MasterSeed" onChange={(event) => setTut_40_AppMasterSeed(event.target.value)} value={Tut_40_AppMasterSeed} variant="standard"></TextField><br></br> */}
-              <Button variant='outlined' style={{ color: 'black' }} onClick={() => Tut_50_WritingData()}>Create</Button>
+              <TextField style={{width: "95%"}} label="UserData" onChange={(event) => setTut_50_Data(event.target.value)} value={Tut_50_Data} variant="standard"></TextField><br></br><br></br>
+              <Button variant='outlined' style={{ color: 'black' }} onClick={() => Tut_50_WritingData()}>Write Data</Button><br></br><br></br>
+              <TextField style={{width: "95%"}} label="ReturnValue" readOnly value={Tut_50_ReturnValue} variant="standard"></TextField>
             </Paper>
           </Grid>
         </Grid>
@@ -544,14 +665,13 @@ export default function View() {
         <Grid container className={classes.tut_item}>
           <Grid item className={classes.tut_left} xs={8}>
             <Paper className={classes.paper}>
-              Reading Application Data based on Generated Child Seed<br></br>
+              <ReactMarkdown source={tut_51_md} />
             </Paper>
           </Grid>
           <Grid item className={classes.tut_right} xs={4}>
             <Paper className={classes.paper}>
-              {/* <TextField label="App Domain" onChange={(event) => setTut_40_AppDomain(event.target.value)} value={Tut_40_AppDomain} variant="standard"></TextField><br></br> */}
-              {/* <TextField label="App MasterSeed" onChange={(event) => setTut_40_AppMasterSeed(event.target.value)} value={Tut_40_AppMasterSeed} variant="standard"></TextField><br></br> */}
-              <Button variant='outlined' style={{ color: 'black' }} onClick={() => Tut_50_ReadingData()}>Create</Button>
+              <Button variant='outlined' style={{ color: 'black' }} onClick={() => Tut_50_ReadingData()}>Read Data</Button>
+              <TextField style={{width: "95%"}} label="ReturnValue" readOnly value={Tut_50_ReturnValue2} variant="standard"></TextField>
             </Paper>
           </Grid>
         </Grid>
@@ -559,14 +679,15 @@ export default function View() {
         <Grid container className={classes.tut_item}>
           <Grid item className={classes.tut_left} xs={8}>
             <Paper className={classes.paper}>
-            Getting Discoverable JSON
+              <ReactMarkdown source={tut_55_md} />
             </Paper>
           </Grid>
           <Grid item className={classes.tut_right} xs={4}>
             <Paper className={classes.paper}>
-              {/* <TextField label="App Domain" onChange={(event) => setTut_40_AppDomain(event.target.value)} value={Tut_40_AppDomain} variant="standard"></TextField><br></br> */}
-              {/* <TextField label="App MasterSeed" onChange={(event) => setTut_40_AppMasterSeed(event.target.value)} value={Tut_40_AppMasterSeed} variant="standard"></TextField><br></br> */}
-              {/* <Button variant='outlined' style={{ color: 'black' }} onClick={() => Tut_50_ReadingData()}>Create</Button> */}
+              <TextField style={{width: "95%"}} label="Message" onChange={(event) => setTut_55_Path(event.target.value)} value={Tut_56_Path} variant="standard"></TextField><br></br>
+              <Button variant='outlined' style={{ color: 'black' }} onClick={() => Tut_55_Json()}>Get Json</Button>
+              <TextField style={{width: "95%"}} label="ReturnValue1" readOnly value={Tut_55_RV1} variant="standard"></TextField>
+              <TextField style={{width: "95%"}} label="ReturnValue2" readOnly value={Tut_55_RV2} variant="standard"></TextField>
             </Paper>
           </Grid>
         </Grid>
@@ -574,14 +695,16 @@ export default function View() {
         <Grid container className={classes.tut_item}>
           <Grid item className={classes.tut_left} xs={8}>
             <Paper className={classes.paper}>
-            Setting Discoverable JSON
+              <ReactMarkdown source={tut_56_md} />
             </Paper>
           </Grid>
           <Grid item className={classes.tut_right} xs={4}>
             <Paper className={classes.paper}>
-              {/* <TextField label="App Domain" onChange={(event) => setTut_40_AppDomain(event.target.value)} value={Tut_40_AppDomain} variant="standard"></TextField><br></br> */}
-              {/* <TextField label="App MasterSeed" onChange={(event) => setTut_40_AppMasterSeed(event.target.value)} value={Tut_40_AppMasterSeed} variant="standard"></TextField><br></br> */}
-              {/* <Button variant='outlined' style={{ color: 'black' }} onClick={() => Tut_50_ReadingData()}>Create</Button> */}
+              <TextField style={{width: "95%"}} label="Message" onChange={(event) => setTut_56_Path(event.target.value)} value={Tut_56_Path} variant="standard"></TextField><br></br>
+              <TextField style={{width: "95%"}} label="Message" onChange={(event) => setTut_56_Message(event.target.value)} value={Tut_56_Message} variant="standard"></TextField><br></br>
+              <Button variant='outlined' style={{ color: 'black' }} onClick={() => Tut_56_Json()}>Set Json</Button>
+              <TextField style={{width: "95%"}} label="ReturnValue1" readOnly value={Tut_56_RV1} variant="standard"></TextField>
+              <TextField style={{width: "95%"}} label="ReturnValue2" readOnly value={Tut_56_RV2} variant="standard"></TextField>
             </Paper>
           </Grid>
         </Grid>
@@ -593,8 +716,8 @@ export default function View() {
         <Grid container className={classes.tut_item}>
           <Grid item xs={12}>
             <Paper className={classes.paper} alignitems="center">
-            <ReactMarkdown source={mydac_md} /></Paper>
-            
+              <ReactMarkdown source={mydac_md} />
+            </Paper>          
           </Grid>
         </Grid>
 
@@ -606,9 +729,9 @@ export default function View() {
           </Grid>
           <Grid item className={classes.tut_right} xs={4}>
             <Paper className={classes.paper}>
-              {/* <TextField label="App Domain" onChange={(event) => setTut_40_AppDomain(event.target.value)} value={Tut_40_AppDomain} variant="standard"></TextField><br></br> */}
-              {/* <TextField label="App MasterSeed" onChange={(event) => setTut_40_AppMasterSeed(event.target.value)} value={Tut_40_AppMasterSeed} variant="standard"></TextField><br></br> */}
-              <Button variant='outlined' style={{ color: 'black' }} onClick={() => Tut_60_Dac()}>Create</Button>
+              <TextField style={{width: "95%"}} label="SkyLink" onChange={(event) => setTut_60_SkyLink(event.target.value)} value={Tut_60_SkyLink} variant="standard"></TextField><br></br><br></br>
+              <Button variant='outlined' style={{ color: 'black' }} onClick={() => Tut_60_Dac()}>Create</Button><br></br><br></br>
+              <TextField style={{width: "95%"}} label="ReturnValue" readOnly value={Tut_60_ReturnValue} variant="standard"></TextField>
             </Paper>
           </Grid>
         </Grid>
@@ -621,9 +744,10 @@ export default function View() {
           </Grid>
           <Grid item className={classes.tut_right} xs={4}>
             <Paper className={classes.paper}>
-              {/* <TextField label="App Domain" onChange={(event) => setTut_40_AppDomain(event.target.value)} value={Tut_40_AppDomain} variant="standard"></TextField><br></br> */}
-              {/* <TextField label="App MasterSeed" onChange={(event) => setTut_40_AppMasterSeed(event.target.value)} value={Tut_40_AppMasterSeed} variant="standard"></TextField><br></br> */}
-              <Button variant='outlined' style={{ color: 'black' }} onClick={() => Tut_61_Dac()}>Interact</Button>
+              <TextField style={{width: "95%"}} label="SkyLink" onChange={(event) => setTut_61_SkyLink(event.target.value)} value={Tut_61_SkyLink} variant="standard"></TextField><br></br><br></br>
+              <TextField style={{width: "95%"}} label="Action" onChange={(event) => setTut_61_Action(event.target.value)} value={Tut_61_Action} variant="standard"></TextField><br></br><br></br>
+              <Button variant='outlined' style={{ color: 'black' }} onClick={() => Tut_61_Dac()}>Interact</Button><br></br><br></br>
+              <TextField style={{width: "95%"}} label="ReturnValue" readOnly value={Tut_61_ReturnValue} variant="standard"></TextField>
             </Paper>
           </Grid>
         </Grid>
