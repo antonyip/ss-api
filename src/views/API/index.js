@@ -394,6 +394,13 @@ try {
   const client = new SkynetClient("https://siasky.net");
   const mySky = await client.loadMySky("MyAppDomain");
 
+  // Load the pop up menu for people to login
+  const isLoggedIn = await mySky.checkLogin()
+  if (!isLoggedIn)
+  {
+    await mySky.requestLoginAccess()
+  }
+
   // Initialize DAC, auto-adding permissions.
   const dac = new ContentRecordDAC()
   await mySky.loadDacs(dac);
@@ -416,6 +423,13 @@ try {
   const client = new SkynetClient("https://siasky.net");
   const mySky = await client.loadMySky("MyAppDomain");
 
+  // Load the pop up menu for people to login
+  const isLoggedIn = await mySky.checkLogin()
+  if (!isLoggedIn)
+  {
+    await mySky.requestLoginAccess()
+  }
+  
   // Initialize DAC, auto-adding permissions.
   const dac = new ContentRecordDAC()
   await mySky.loadDacs(dac);
@@ -761,6 +775,13 @@ export default function View() {
         const client = new SkynetClient("https://siasky.net");
         const mySky = await client.loadMySky("MyAppDomain");
 
+        // Load the pop up menu for people to login
+        const isLoggedIn = await mySky.checkLogin()
+        if (!isLoggedIn)
+        {
+          await mySky.requestLoginAccess()
+        }
+
         // Initialize DAC, auto-adding permissions.
         const dac = new ContentRecordDAC()
         await mySky.loadDacs(dac);
@@ -778,6 +799,13 @@ export default function View() {
     try {
       const client = new SkynetClient("https://siasky.net");
       const mySky = await client.loadMySky("MyAppDomain");
+
+      // Load the pop up menu for people to login
+      const isLoggedIn = await mySky.checkLogin()
+      if (!isLoggedIn)
+      {
+        await mySky.requestLoginAccess()
+      }
 
       // Initialize DAC, auto-adding permissions.
       const dac = new ContentRecordDAC()
