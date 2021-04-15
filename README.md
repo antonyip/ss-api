@@ -1,6 +1,6 @@
 # Pre-Reqs
-node v.14.10
-yarn
+- node v14+
+- yarn
 
 # Using this Repo
 ## Development
