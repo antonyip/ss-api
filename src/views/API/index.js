@@ -55,6 +55,10 @@ A table:
 
 const title_md =`
 # SkynetClient API Usage (Browser-JS)
+- The Skynet Client is required to make any API calls.
+- It sets the portal that will be used for all requests.
+- It can also be initialized with custom connection options that will be applied in all calls.
+  - unless calling an API method with the same options.
 `
 const tut1_md =`
   ## Creating a Skynet Connection
@@ -170,9 +174,9 @@ try {
   // "This is some example JSON data new. From antAPI"
   const json = { example: Tut_50_Data , moreStuffs: "you can add more stuffs..." }
   try {
-    const returnValue = await mySkyClient.db.setJSON(childKeys.privateKey, dataKey, json)
-    console.log(returnValue)
-    setTut_50_ReturnValue(returnValue.skylink)
+    let rv = await mySkyClient.db.setJSON(childKeys.privateKey, dataKey, json)
+    console.log(rv)
+    setTut_50_ReturnValue(rv.skylink)
   } catch (error) {
     console.log(error);
   }
@@ -211,9 +215,9 @@ try {
   // new Stuffs after previous tutorial
   // Reading Data to from client db
   try {
-    const { data, skylink } = await mySkyClient.db.getJSON(childKeys.publicKey, dataKey);
-    console.log(data)
-    console.log(skylink)
+    let rv = await mySkyClient.db.getJSON(childKeys.publicKey, dataKey);
+    console.log(rv.data)
+    console.log(rv.skylink)
     setTut_50_ReturnValue2(data.example)
   } catch (error) {
     console.log(error);
@@ -233,6 +237,21 @@ const myuserdata_md =`# UserData Handling`
 const mydac_md =`# Content Record Data Access Control (DAC) Handling
 You have to go to https://skey.hns.siasky.net/ to retrieve the records as the Browser-JS doesn't allow you to.
 `
+
+const myregistry_md = `# Registry API
+- Use Reading/Writing Application Data based on Generated Child Seed, its better... 
+`
+const myhandshake_md = `# Handshake API
+- Handshake is a protocol which allows the creation of update-able content with persistent links, backed by the Skynet infrastructure.
+  - https://handshake.org/
+- For more information on using Handshake with Skynet, please see this blog post.
+  - https://blog.sia.tech/skynet-handshake-d5d16e6b632f
+`
+
+const myskykeys_md = `# Skykey API
+- Skykey API is not availble on Browser-JS
+`
+
 const myuserseeds_md =`
 ## Creating User Seeds
 ~~~js
@@ -323,6 +342,50 @@ try {
 }
 ~~~
 `
+
+const tut_500_md = `
+## Download Domain File
+~~~js
+const client = new SkynetClient();
+try {
+  let rv = client.downloadFileHns(Tut_500_Domain);
+  // Or client.openFileHns(domain) to open it in a new browser tab.
+  console.log(rv)
+  set_Tut_500_RV(rv)
+} catch (error) {
+  console.log(error);
+}
+~~~
+`
+
+const tut_501_md = `
+## Open Domain File
+~~~js
+const client = new SkynetClient();
+try {
+  let rv = client.openFileHns(Tut_501_Domain);
+  console.log(rv)
+  set_Tut_501_RV(rv)
+} catch (error) {
+  console.log(error);
+}
+~~~
+`
+
+const tut_502_md = `
+## Resolving Handshake Domain
+~~~js
+const client = new SkynetClient();
+try {
+  const data = client.resolveHns(Tut_502_Domain);
+  console.log(rv)
+  set_Tut_502_RV(rv)
+} catch (error) {
+  console.log(error);
+}
+~~~
+`
+
 const mydaccreate_md =
 `
 ## Create DAC
@@ -392,7 +455,12 @@ export default function View() {
   var [Tut_55_RV2, setTut_55_RV2]= useState("")
   var [Tut_56_RV1, setTut_56_RV1]= useState("")
   var [Tut_56_RV2, setTut_56_RV2]= useState("")
-  
+  var [Tut_500_Domain, setTut_500_Domain]= useState("doesn")
+  var [Tut_500_RV, setTut_500_RV]= useState("")
+  var [Tut_501_Domain, setTut_501_Domain]= useState("doesn")
+  var [Tut_501_RV, setTut_501_RV]= useState("")
+  var [Tut_502_Domain, setTut_502_Domain]= useState("doesn")
+  var [Tut_502_RV, setTut_502_RV]= useState("")
   var [Tut_60_SkyLink, setTut_60_SkyLink]= useState("AAA6f5jNF0O8xxtObjf7HwWz_k-ozW8xxuEq2gjtdManQQ")
   var [Tut_60_ReturnValue, setTut_60_ReturnValue]= useState("")
   var [Tut_61_SkyLink, setTut_61_SkyLink]= useState("AAA6f5jNF0O8xxtObjf7HwWz_k-ozW8xxuEq2gjtdManQQ")
@@ -655,6 +723,39 @@ export default function View() {
 
   }
 
+  const Tut_500 = async() => {   
+    const client = new SkynetClient("https://siasky.net");
+    try {
+      let rv = await client.downloadFileHns(Tut_500_Domain);
+      console.log(rv)
+      setTut_500_RV(rv)
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const Tut_501 = async() => {   
+    const client = new SkynetClient("https://siasky.net");
+    try {
+      let rv = await client.openFileHns(Tut_501_Domain);
+      console.log(rv)
+      setTut_501_RV(rv)
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const Tut_502 = async() => {   
+    const client = new SkynetClient("https://siasky.net");
+    try {
+      let rv = await client.resolveHns(Tut_502_Domain);
+      console.log(rv)
+      setTut_502_RV(rv.skylink)
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   const Tut_60_Dac = async() => {   
       try {
         const client = new SkynetClient("https://siasky.net");
@@ -721,7 +822,7 @@ export default function View() {
             <Paper className={classes.paper}>
               <TextField style={{width: "95%"}} required label="SkynetPortal" value={Tut1_URL} onChange={(event) => setTut1_URL(event.target.value)} variant="standard">https://siasky.net</TextField> <br></br><br></br>
               <TextField style={{width: "95%"}} required label="YourAppDomain" onChange={(event) => setTut1_MyDomain(event.target.value)} value={Tut1_MyDomain} variant="standard">MyAppDomain</TextField><br></br><br></br>
-              <Button variant='outlined' style={{ color: 'black' }} onClick={() => Tut_InitSkyNetClient()}>TriggerAPI</Button><br></br><br></br>
+              <Button variant='outlined' style={{ color: 'black' }} onClick={() => Tut_InitSkyNetClient()}>Login</Button><br></br><br></br>
               <TextField style={{width: "95%"}} id="tut_rv1" label="ReturnValue - UserID" readOnly value={Tut1_ReturnValue} variant="standard"></TextField><br></br><br></br>
             </Paper>
           </Grid>
@@ -778,7 +879,7 @@ export default function View() {
           <Grid item className={classes.tut_right} xs={4}>
             <Paper className={classes.paper}>
               <TextField style={{width: "95%"}} label="My User Text" onChange={(event) => setTut3_Text(event.target.value)} value={Tut3_Text} variant="standard"></TextField><br></br>
-              <Button variant='outlined' style={{ color: 'black' }} onClick={() => Tut_UploadFile()}>UploadText</Button><br></br>
+              <Button variant='outlined' style={{ color: 'black' }} onClick={() => Tut_UploadFile()}>Upload Text to Skynet</Button><br></br>
               <TextField style={{width: "95%"}} label="ReturnValue - SiaLink" readOnly value={Tut4_ReturnValue} variant="standard"></TextField>
             </Paper>
           </Grid>
@@ -879,8 +980,75 @@ export default function View() {
           </Grid>
         </Grid>
 
-        
-        
+
+        {/* Registry goes here */}
+        <Grid container className={classes.tut_item}>
+          <Grid item xs={12}>
+            <Paper className={classes.paper} alignitems="center">
+              <ReactMarkdown source={myregistry_md} /></Paper>
+          </Grid>
+        </Grid>
+
+        {/* handshake stuffs goes here */}
+        <Grid container className={classes.tut_item}>
+          <Grid item xs={12}>
+            <Paper className={classes.paper} alignitems="center">
+              <ReactMarkdown source={myhandshake_md} /></Paper>
+          </Grid>
+        </Grid>
+
+        <Grid container className={classes.tut_item}>
+          <Grid item className={classes.tut_left} xs={8}>
+            <Paper className={classes.paper}>
+              <ReactMarkdown source={tut_500_md} />
+            </Paper>
+          </Grid>
+          <Grid item className={classes.tut_right} xs={4}>
+            <Paper className={classes.paper}>
+              <TextField style={{width: "95%"}} label="DomainName" onChange={(event) => setTut_500_Domain(event.target.value)} value={Tut_500_Domain} variant="standard"></TextField><br></br>
+              <Button variant='outlined' style={{ color: 'black' }} onClick={() => Tut_500()}>Download Handshake Domain</Button>
+              <TextField style={{width: "95%"}} label="ReturnValue" readOnly value={Tut_500_RV} variant="standard"></TextField>
+            </Paper>
+          </Grid>
+        </Grid>
+
+        <Grid container className={classes.tut_item}>
+          <Grid item className={classes.tut_left} xs={8}>
+            <Paper className={classes.paper}>
+              <ReactMarkdown source={tut_501_md} />
+            </Paper>
+          </Grid>
+          <Grid item className={classes.tut_right} xs={4}>
+            <Paper className={classes.paper}>
+              <TextField style={{width: "95%"}} label="DomainName" onChange={(event) => setTut_501_Domain(event.target.value)} value={Tut_501_Domain} variant="standard"></TextField><br></br>
+              <Button variant='outlined' style={{ color: 'black' }} onClick={() => Tut_501()}>Opening Handshake Domain</Button>
+              <TextField style={{width: "95%"}} label="ReturnValue" readOnly value={Tut_501_RV} variant="standard"></TextField>
+            </Paper>
+          </Grid>
+        </Grid>
+
+        <Grid container className={classes.tut_item}>
+          <Grid item className={classes.tut_left} xs={8}>
+            <Paper className={classes.paper}>
+              <ReactMarkdown source={tut_502_md} />
+            </Paper>
+          </Grid>
+          <Grid item className={classes.tut_right} xs={4}>
+            <Paper className={classes.paper}>
+              <TextField style={{width: "95%"}} label="DomainName" onChange={(event) => setTut_502_Domain(event.target.value)} value={Tut_502_Domain} variant="standard"></TextField><br></br>
+              <Button variant='outlined' style={{ color: 'black' }} onClick={() => Tut_502()}>Resolving Handshake Domain</Button>
+              <TextField style={{width: "95%"}} label="ReturnValue" readOnly value={Tut_502_RV} variant="standard"></TextField>
+            </Paper>
+          </Grid>
+        </Grid>
+
+        {/* Sky keys stuffs goes here */}
+        <Grid container className={classes.tut_item}>
+          <Grid item xs={12}>
+            <Paper className={classes.paper} alignitems="center">
+              <ReactMarkdown source={myskykeys_md} /></Paper>
+          </Grid>
+        </Grid>
 
         {/* SkynetClient-SkyDB DAC Handling(Browser-JS) */}
         <Grid container className={classes.tut_item}>
