@@ -59,11 +59,8 @@ const title_md =`
 const tut1_md =`
   ## Creating a Skynet Connection
   ~~~js
-  // Entry point of all SkynetClients 
-  // - you should leave this empty on a production system
-  // e.g. const mySkyClient = new SkynetClient();
   try {
-    const mySkyClient = new SkynetClient(%SkyNetPortal%);
+    const mySkyClient = new SkynetClient(Tut1_URL);
     // Load MySky
     const mySky = await mySkyClient.loadMySky(Tut1_MyDomain)
 
@@ -79,11 +76,11 @@ const tut1_md =`
 
     setTut1_ReturnValue(userID)
     console.log(userID)
-  }
-  catch (error)
-  {
-    console.log(error.message);
-  }
+    }
+    catch (error)
+    {
+      console.log(error.message);
+    }
   ~~~
 `
 
@@ -145,10 +142,88 @@ const tut4_md =`
   ~~~
 `
 const tut_50_md =`
-Writing Application Data based on Generated Child Seed
+## Writing Application Data based on Generated Child Seed
+~~~js
+try {
+  const mySkyClient = new SkynetClient("https://siasky.net");
+  const dataKey = "MyAppDomain";
+  // Load MySky
+  const mySky = await mySkyClient.loadMySky(dataKey)
+
+  // Load the pop up menu for people to login
+  const isLoggedIn = await mySky.checkLogin()
+  if (!isLoggedIn)
+  {
+    await mySky.requestLoginAccess()
+  }
+
+  // get the user id - to generate a child seed from your master seed
+  const userID = await mySky.userID()
+
+  const masterKey = genKeyPairFromSeed("<MasterKey>");
+
+  const childSeed = deriveChildSeed(masterKey.privateKey, userID)
+
+  const childKeys = genKeyPairFromSeed(childSeed)
+
+  // Writing Data to client db
+  // "This is some example JSON data new. From antAPI"
+  const json = { example: Tut_50_Data , moreStuffs: "you can add more stuffs..." }
+  try {
+    const returnValue = await mySkyClient.db.setJSON(childKeys.privateKey, dataKey, json)
+    console.log(returnValue)
+    setTut_50_ReturnValue(returnValue.skylink)
+  } catch (error) {
+    console.log(error);
+  }
+}
+catch (error)
+{
+  console.log(error.message);
+}
+~~~
 `
 const tut_51_md =`
-Reading Application Data based on Generated Child Seed
+## Reading Application Data based on Generated Child Seed
+~~~js
+try {
+  const mySkyClient = new SkynetClient("https://siasky.net");
+  const dataKey = "MyAppDomain";
+  // Load MySky
+  const mySky = await mySkyClient.loadMySky(dataKey)
+
+  // Load the pop up menu for people to login
+  const isLoggedIn = await mySky.checkLogin()
+  if (!isLoggedIn)
+  {
+    await mySky.requestLoginAccess()
+  }
+
+  // get the user id - to generate a child seed from your master seed
+  const userID = await mySky.userID()
+
+  const masterKey = genKeyPairFromSeed("<MasterKey>");
+
+  const childSeed = deriveChildSeed(masterKey.privateKey, userID);
+
+  const childKeys = genKeyPairFromSeed(childSeed);
+
+  // new Stuffs after previous tutorial
+  // Reading Data to from client db
+  try {
+    const { data, skylink } = await mySkyClient.db.getJSON(childKeys.publicKey, dataKey);
+    console.log(data)
+    console.log(skylink)
+    setTut_50_ReturnValue2(data.example)
+  } catch (error) {
+    console.log(error);
+  }
+  }
+  catch (error)
+  {
+    console.log(error.message);
+  }
+~~~
 `
 
 const myuser_md =`# User Handling`
@@ -159,7 +234,7 @@ const mydac_md =`# Content Record Data Access Control (DAC) Handling
 You have to go to https://skey.hns.siasky.net/ to retrieve the records as the Browser-JS doesn't allow you to.
 `
 const myuserseeds_md =`
-Creating User Seeds  
+## Creating User Seeds
 ~~~js
 try {
     const mySkyClient = new SkynetClient("https://siasky.net");
@@ -191,11 +266,106 @@ try {
 ~~~
 `
 const tut_55_md =`
-Getting Discoverable Json
+## Getting Discoverable Json
+~~~js
+try {
+
+  const mySkyClient = new SkynetClient("https://siasky.net");
+  const dataKey = "MyAppDomain";
+  // Load MySky
+  const mySky = await mySkyClient.loadMySky(dataKey)
+
+  // Load the pop up menu for people to login
+  const isLoggedIn = await mySky.checkLogin()
+  if (!isLoggedIn)
+  {
+    await mySky.requestLoginAccess()
+  }
+
+  // Get discoverable JSON data from the given path.
+  const { data, skylink } = await mySky.getJSON(Tut_55_Path);
+  console.log(data)
+  console.log(skylink)
+  setTut_55_RV1(data.message)
+  setTut_55_RV2(skylink)
+} catch (error) {
+  console.log(error)
+}
+~~~
 `
 
 const tut_56_md =`
-Setting Discoverable Json
+## Setting Discoverable Json
+~~~js
+try {
+
+  const mySkyClient = new SkynetClient("https://siasky.net");
+  const dataKey = "MyAppDomain";
+  // Load MySky
+  const mySky = await mySkyClient.loadMySky(dataKey)
+
+  // Load the pop up menu for people to login
+  const isLoggedIn = await mySky.checkLogin()
+  if (!isLoggedIn)
+  {
+    await mySky.requestLoginAccess()
+  }
+
+  // Set discoverable JSON data from the given path.
+  let jsonValue = { message: Tut_56_Message }
+  const { data, skylink } = await mySky.setJSON(Tut_56_Path, jsonValue);
+  console.log(data)
+  console.log(skylink)
+  setTut_56_RV1(data.message)
+  setTut_56_RV2(skylink)
+} catch (error) {
+  console.log(error)
+}
+~~~
+`
+const mydaccreate_md =
+`
+## Create DAC
+~~~js
+try {
+  const client = new SkynetClient("https://siasky.net");
+  const mySky = await client.loadMySky("MyAppDomain");
+
+  // Initialize DAC, auto-adding permissions.
+  const dac = new ContentRecordDAC()
+  await mySky.loadDacs(dac);
+  let jsonValue = {skylink: Tut_60_SkyLink, metadata: {action:"NotInUse?"}}
+  const res = await dac.recordNewContent(jsonValue)
+  console.log(res)
+  setTut_60_ReturnValue(res.submitted)
+}
+catch (error)
+{
+  console.log(error.message)
+}
+~~~
+`
+const mydacinteract_md =
+`
+## Interact DAC
+~~~js
+try {
+  const client = new SkynetClient("https://siasky.net");
+  const mySky = await client.loadMySky("MyAppDomain");
+
+  // Initialize DAC, auto-adding permissions.
+  const dac = new ContentRecordDAC()
+  await mySky.loadDacs(dac);
+  let jsonValue = {skylink: Tut_61_SkyLink, metadata: {action:Tut_61_Action}}
+  const res = await dac.recordInteraction(jsonValue)
+  console.log(res)
+  setTut_61_ReturnValue(res.submitted)
+}
+catch (error)
+{
+  console.log(error.message)
+}
+~~~
 `
 
 export default function View() {
@@ -724,7 +894,7 @@ export default function View() {
         <Grid container className={classes.tut_item}>
           <Grid item className={classes.tut_left} xs={8}>
             <Paper className={classes.paper}>
-            Create (DAC) 
+            <ReactMarkdown source={mydaccreate_md} />
             </Paper>
           </Grid>
           <Grid item className={classes.tut_right} xs={4}>
@@ -739,7 +909,7 @@ export default function View() {
         <Grid container className={classes.tut_item}>
           <Grid item className={classes.tut_left} xs={8}>
             <Paper className={classes.paper}>
-            Interact (DAC) 
+            <ReactMarkdown source={mydacinteract_md} />
             </Paper>
           </Grid>
           <Grid item className={classes.tut_right} xs={4}>
