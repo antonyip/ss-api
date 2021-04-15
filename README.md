@@ -9,14 +9,14 @@ yarn && yarn start
 ```
 ## Upload to siasky
 ```
-yarn && yarn upload
+yarn build && yarn siasky
 ✔ What do you want to use as your public directory? … build
 ✔ Configure as a signle-page app (rewrite all urls to /index.html)? … yes
 ✔ Wanna deploy web pages to Skynet using handshake domains ? … no
 ```
 
-# Public Deployed Site (Probably an older version as I don't update this often)
-https://siasky.net/AAA6f5jNF0O8xxtObjf7HwWz_k-ozW8xxuEq2gjtdManQQ
+# Public Deployed Site
+https://siasky.net/AADQLQbPFD_kn144bRpLBeVu4ZArXn0BpOdN0J1q9pRsXg
 
 # functions of skydb
 - Version 4.0.0
