@@ -16,7 +16,7 @@ yarn build && yarn siasky
 ```
 
 # Public Deployed Site
-https://siasky.net/AADQLQbPFD_kn144bRpLBeVu4ZArXn0BpOdN0J1q9pRsXg
+https://siasky.net/AAAGR5D19nL6v9MXXjDBWqAxA68Ysu1Pahf4j-8LHCaK5A/
 
 # functions of skydb
 - Version 4.0.0
